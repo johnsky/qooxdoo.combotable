@@ -103,7 +103,6 @@ qx.Class.define("combotable.ComboTable", {
      *
      * 1. Reset the table selection;
      * 2. If the amount of rows is greater 0 and the 'textfield' has any value then set focus on the first table row;
-     * 3. If the popup is invisible then set 'textfield' value to the table selected row data.
      *
      * @return {void}
      */
@@ -128,12 +127,6 @@ qx.Class.define("combotable.ComboTable", {
       {
         selectionModel.setSelectionInterval(0, 0);
         table.setFocusedCell(1, 0, true);
-      }
-
-      // 3. If the popup is invisible then set 'textfield' value to the table selected row data
-      if (!this.getChildControl("popup").isVisible())
-      {
-        this._applySelectedRowData();
       }
     },
 
@@ -311,8 +304,8 @@ qx.Class.define("combotable.ComboTable", {
     },
 
     // overridden
-    _onKeyPress : function(e) {
-
+    _onKeyPress : function(e)
+    {
       var popup = this.getChildControl("popup");
       var identifier = e.getKeyIdentifier();
 
@@ -364,7 +357,8 @@ qx.Class.define("combotable.ComboTable", {
      *
      * @return {void}
      */
-    rowDown : function() {
+    rowDown: function()
+    {
       var row = this.getSelectedRowData();
       var table = this._table;
 
@@ -387,7 +381,8 @@ qx.Class.define("combotable.ComboTable", {
      *
      * @return {void}
      */
-    rowUp : function() {
+    rowUp: function()
+    {
       var row = this.getSelectedRowData();
       var table = this._table;
 
