@@ -71,6 +71,17 @@ qx.Class.define("combotable.ComboTable", {
   properties:
   {
     /**
+     * It filters table data if an input has {limitTo} number of symbols.
+     *
+     * TODO: to implement a behaviour that take in account {limitTo} value
+     */
+    limitTo:
+    {
+      init: 0,
+      check: "Number"
+    },
+
+    /**
      * Loading data status. This property is bound to table model property with the same name.
      */
     loading:
@@ -206,20 +217,18 @@ qx.Class.define("combotable.ComboTable", {
             allowGrowX : true,
             allowGrowY : true,
             enabled    : false
-          }), { edge : 10 });
+          }), { edge : 5 });
 
           var table = this._createTable();
-          control.add(table, { edge : 10 });
+          control.add(table, { edge : 5 });
           break;
       }
 
       return control || this.base(arguments, id);
     },
 
-    _createTable: function()
+    _customizeTable: function()
     {
-      var tm = this._tableModel;
-
       var custom = {
         tableColumnModel : function(obj) {
           return new qx.ui.table.columnmodel.Resize(obj);
@@ -232,6 +241,13 @@ qx.Class.define("combotable.ComboTable", {
         initiallyHiddenColumns : [ 0 ]
       };
 
+      return custom;
+    },
+
+    _createTable: function()
+    {
+      var tm = this._tableModel;
+      var custom = this._customizeTable();
       var table = this._table = new qx.ui.table.Table(tm, custom).set({
         focusable         : false,
         keepFocus         : true,
@@ -314,6 +330,8 @@ qx.Class.define("combotable.ComboTable", {
         this.debug("On key press", identifier, popup);
       }
 
+      // Up|Down: it makes the popup visible if it doesn't
+      // Enter|Esc|Tab: it hides the popup if it's visible
       switch(identifier)
       {
         case "Down":
@@ -427,6 +445,8 @@ qx.Class.define("combotable.ComboTable", {
     //Overridden
     _onTextFieldInput : function(e)
     {
+      //After a user provided any input, the popuped table data is filtered
+
       var value = e.getData();
       var table = this._table;
 
